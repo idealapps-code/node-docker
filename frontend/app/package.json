@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "dev": "node main.js",
+    "start": "node main.js",
+    "build": ""
+  },
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}

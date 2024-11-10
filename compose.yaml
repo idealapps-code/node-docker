@@ -1,0 +1,84 @@
+services:
+  nginx-dev:
+    build:
+      context: ./nginx
+      target: development
+    ports:
+      - 80:80
+      - 443:443
+    profiles:
+      - dev
+    restart: unless-stopped
+  nginx-prod:
+    build:
+      context: ./nginx
+      target: production
+    ports:
+      - 80:80
+      - 443:443
+    profiles:
+      - prod
+    restart: unless-stopped
+  frontend-dev:
+    build:
+      context: ./frontend
+      target: development
+    volumes:
+      - ./frontend/app:/app
+    expose:
+      - 3000
+    profiles:
+      - dev
+    restart: unless-stopped
+  frontend-prod:
+    build:
+      context: ./frontend
+      target: production
+    volumes:
+      - frontend:/app
+    expose:
+      - 3000
+    profiles:
+      - prod
+    restart: unless-stopped
+  backend-dev:
+    build:
+      context: ./backend
+      target: development
+    volumes:
+      - ./backend/app:/app
+    expose:
+      - 3000
+    profiles:
+      - dev
+    restart: unless-stopped
+  backend-prod:
+    build:
+      context: ./backend
+      target: production
+    volumes:
+      - backend:/app
+    expose:
+      - 3000
+    profiles:
+      - prod
+    restart: unless-stopped
+  postgresql:
+    build: ./postgresql
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: app
+    volumes:
+      - postgresql:/var/lib/postgresql
+    expose:
+      - 5432
+    restart: unless-stopped
+
+volumes:
+  frontend:
+    name: frontend
+  backend:
+    name: backend
+  postgresql:
+    name: postgresql
